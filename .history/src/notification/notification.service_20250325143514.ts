@@ -50,29 +50,6 @@ export class NotificationService {
     return this.sendEmail(to, 'Booking Rejected ❌', html);
   }
 
-  async sendWhatsApp(to: string, message: string) {
-    return this.twilioClient.messages.create({
-      body: message,
-      from: process.env.TWILIO_WHATSAPP_FROM!,
-      to: `whatsapp:${to}`,
-    });
-  }
-
-  async sendBookingCreatedWhatsApp(to: string, bookingId: string) {
-    const message = `📌 Booking Created\nBooking ID: ${bookingId}\nYour booking request has been submitted.`;
-    return this.sendWhatsApp(to, message);
-  }
-
-  async sendBookingConfirmedWhatsApp(to: string, bookingId: string) {
-    const message = `✅ Booking Confirmed\nBooking ID: ${bookingId}\nYour booking has been confirmed.`;
-    return this.sendWhatsApp(to, message);
-  }
-
-  async sendBookingRejectedWhatsApp(to: string, bookingId: string) {
-    const message = `❌ Booking Rejected\nBooking ID: ${bookingId}\nUnfortunately, your booking was rejected.`;
-    return this.sendWhatsApp(to, message);
-  }
-
   async sendBookingInvoicePdf(to: string, booking: any) {
     const doc = new PDFDocument();
     const stream = new streamBuffers.WritableStreamBuffer();

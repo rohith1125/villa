@@ -7,7 +7,6 @@ import { Twilio } from 'twilio';
 @Injectable()
 export class NotificationService {
   private transporter: nodemailer.Transporter;
-  private twilioClient: Twilio;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
@@ -19,12 +18,8 @@ export class NotificationService {
         pass: process.env.EMAIL_PASS,
       },
     });
-
-    this.twilioClient = new Twilio(
-      process.env.TWILIO_ACCOUNT_SID!,
-      process.env.TWILIO_AUTH_TOKEN!,
-    );
   }
+  
 
   async sendEmail(to: string, subject: string, html: string) {
     await this.transporter.sendMail({
@@ -48,29 +43,6 @@ export class NotificationService {
   async sendBookingRejected(to: string, bookingId: string) {
     const html = `<h3>Booking rejected ❌</h3><p>Your booking ID <strong>${bookingId}</strong> was rejected.</p>`;
     return this.sendEmail(to, 'Booking Rejected ❌', html);
-  }
-
-  async sendWhatsApp(to: string, message: string) {
-    return this.twilioClient.messages.create({
-      body: message,
-      from: process.env.TWILIO_WHATSAPP_FROM!,
-      to: `whatsapp:${to}`,
-    });
-  }
-
-  async sendBookingCreatedWhatsApp(to: string, bookingId: string) {
-    const message = `📌 Booking Created\nBooking ID: ${bookingId}\nYour booking request has been submitted.`;
-    return this.sendWhatsApp(to, message);
-  }
-
-  async sendBookingConfirmedWhatsApp(to: string, bookingId: string) {
-    const message = `✅ Booking Confirmed\nBooking ID: ${bookingId}\nYour booking has been confirmed.`;
-    return this.sendWhatsApp(to, message);
-  }
-
-  async sendBookingRejectedWhatsApp(to: string, bookingId: string) {
-    const message = `❌ Booking Rejected\nBooking ID: ${bookingId}\nUnfortunately, your booking was rejected.`;
-    return this.sendWhatsApp(to, message);
   }
 
   async sendBookingInvoicePdf(to: string, booking: any) {

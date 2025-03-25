@@ -171,10 +171,7 @@ export class BookingService {
 
     // Send WhatsApp notification
     if (guest?.phone) {
-      await this.notification.sendBookingConfirmedWhatsApp(
-        guest.phone,
-        bookingId,
-      );
+      await this.notification.sendBookingConfirmedWhatsApp(guest.phone, bookingId);
     }
 
     return updated;
@@ -205,10 +202,7 @@ export class BookingService {
 
     // Send WhatsApp notification
     if (guest?.phone) {
-      await this.notification.sendBookingRejectedWhatsApp(
-        guest.phone,
-        bookingId,
-      );
+      await this.notification.sendBookingRejectedWhatsApp(guest.phone, bookingId);
     }
 
     return updated;
