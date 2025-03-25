@@ -63,7 +63,7 @@ export class NotificationService {
     doc.end();
     await new Promise((resolve) => stream.on('finish', resolve));
 
-    const buffer = stream.getContents();
+    const buffer = stream.getBuffer();
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_FROM,

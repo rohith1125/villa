@@ -49,7 +49,10 @@ export class NotificationService {
 
     doc.pipe(stream);
 
-    doc.fontSize(20).text('🏖️ Booking Invoice', { align: 'center' }).moveDown();
+    doc
+      .fontSize(20)
+      .text('🏖️ Booking Invoice', { align: 'center' })
+      .moveDown();
 
     doc.fontSize(12).text(`Booking ID: ${booking.id}`);
     doc.text(`Villa: ${booking.villa.title}`);
@@ -63,7 +66,7 @@ export class NotificationService {
     doc.end();
     await new Promise((resolve) => stream.on('finish', resolve));
 
-    const buffer = stream.getContents();
+    const buffer = stream.getBuffer();
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_FROM,
