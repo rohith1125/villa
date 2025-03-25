@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(uuid())
+  email         String          @unique
+  password      String
+  name          String
+  phone         String?
+  role          Role            @default(GUEST)
+  villas        Villa[]         @relation("VillaOwner")
+  bookings      Booking[]
+  reviews       Review[]
+  notifications Notification[]  // ✅ Fix here
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+
+model Villa {
+  id              String     @id @default(uuid())
+  owner           User       @relation("VillaOwner", fields: [ownerId], references: [id])
+  ownerId         String
+  title           String
+  description     String
+  pricePerNight   Float
+  location        String
+  latitude        Float
+  longitude       Float
+  status          VillaStatus @default(DRAFT)
+  images          String[]
+  amenities       String[]
+  cancellationPolicy CancellationPolicy @default(FLEXIBLE)
+  bookings        Booking[]
+  reviews         Review[]
+  availability    VillaAvailability[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Booking {
+  id          String   @id @default(uuid())
+  villa       Villa    @relation(fields: [villaId], references: [id])
+  villaId     String
+  guest       User     @relation(fields: [guestId], references: [id])
+  guestId     String
+  startDate   DateTime
+  endDate     DateTime
+  totalPrice  Float
+  status      BookingStatus @default(PENDING)
+  payment     Payment?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  booking       Booking  @relation(fields: [bookingId], references: [id])
+  bookingId     String   @unique  // ✅ Fix here
+  status        PaymentStatus
+  gateway       PaymentGateway
+  amount        Float
+  transactionId String @unique
+  receiptUrl    String?
+  createdAt     DateTime @default(now())
+}
+
+
+model Review {
+  id          String   @id @default(uuid())
+  guest       User     @relation(fields: [guestId], references: [id])
+  guestId     String
+  villa       Villa    @relation(fields: [villaId], references: [id])
+  villaId     String
+  rating      Int      // 1 to 5
+  comment     String?
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  type        NotificationType
+  content     String
+  sentAt      DateTime
+  status      NotificationStatus
+}
+
+model VillaAvailability {
+  id          String   @id @default(uuid())
+  villa       Villa    @relation(fields: [villaId], references: [id])
+  villaId     String
+  startDate   DateTime
+  endDate     DateTime
+  isBlocked   Boolean  @default(true)
+  reason      String?
+}
+
+enum Role {
+  GUEST
+  OWNER
+  ADMIN
+}
+
+enum VillaStatus {
+  DRAFT
+  PUBLISHED
+  BLOCKED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  INITIATED
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum PaymentGateway {
+  STRIPE
+  RAZORPAY
+}
+
+enum CancellationPolicy {
+  FLEXIBLE
+  MODERATE
+  STRICT
+}
+
+enum NotificationType {
+  EMAIL
+  SMS
+  WHATSAPP
+  PUSH
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
