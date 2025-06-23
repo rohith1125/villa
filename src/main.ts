@@ -5,6 +5,9 @@ import * as bodyParser from 'body-parser';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Allow requests from the frontend dev server
+  app.enableCors();
+
   // ✅ Stripe webhook requires raw body
   app.use(
     '/payment/webhook/stripe',
