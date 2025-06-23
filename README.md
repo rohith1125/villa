@@ -45,6 +45,18 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Frontend
+
+This repository now includes a small React application located in the
+`frontend` directory. It can be used to browse published villas from the
+API.
+
+```bash
+$ cd frontend
+$ npm install
+$ npm start
+```
+
 ## Run tests
 
 ```bash

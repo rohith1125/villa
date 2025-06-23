@@ -1,0 +1,15 @@
+{
+  "short_name": "React App",
+  "name": "Create React App Sample",
+  "icons": [
+    {
+      "src": "https://nestjs.com/img/logo-small.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
