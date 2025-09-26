@@ -17,7 +17,7 @@ function VillaList() {
       <ul>
         {villas.map((v) => (
           <li key={v.id}>
-            {v.title} - {v.location} (${`$${v.pricePerNight}`})
+            {v.title} - {v.location} (₹{v.pricePerNight}/night)
           </li>
         ))}
       </ul>

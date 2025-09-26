@@ -14,15 +14,24 @@ async function bootstrap() {
     }),
   );
 
-  // Allow requests from the frontend dev server
+  // Enable CORS before applying middleware
   app.enableCors();
 
-  // ✅ Stripe webhook requires raw body - this is handled by NestJS middleware
+  // Stripe webhook requires raw body - configure raw body middleware
   app.use('/payment/webhook/stripe', (req, res, next) => {
     if (req.headers['content-type'] === 'application/json') {
-      req.body = JSON.stringify(req.body);
+      let data = '';
+      req.setEncoding('utf8');
+      req.on('data', (chunk) => {
+        data += chunk;
+      });
+      req.on('end', () => {
+        (req as any).rawBody = Buffer.from(data, 'utf8');
+        next();
+      });
+    } else {
+      next();
     }
-    next();
   });
 
   await app.listen(process.env.PORT ?? 3000);

@@ -15,6 +15,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    return { userId: payload.sub, email: payload.email };
+    // You might want to fetch the user from database to get the current role
+    // For now, we'll include the role from the JWT payload if it exists
+    return {
+      userId: payload.sub,
+      email: payload.email,
+      role: payload.role || 'GUEST', // Fallback to GUEST if role not in payload
+    };
   }
 }
