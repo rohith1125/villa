@@ -11,7 +11,7 @@ import { PrismaModule } from '../prisma/prisma.module'; // ✅ Add this
     PrismaModule, // ✅ Fix: This gives AuthModule access to PrismaService
     PassportModule,
     JwtModule.register({
-      secret: 'super-secret-key', // move to env later
+      secret: process.env.JWT_SECRET || 'fallback-secret-key-for-development',
       signOptions: { expiresIn: '7d' },
     }),
   ],

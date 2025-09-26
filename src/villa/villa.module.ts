@@ -4,6 +4,6 @@ import { VillaController } from './villa.controller';
 
 @Module({
   providers: [VillaService],
-  controllers: [VillaController]
+  controllers: [VillaController],
 })
 export class VillaModule {}
