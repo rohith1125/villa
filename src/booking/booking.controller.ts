@@ -26,7 +26,7 @@ export class BookingController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('my')
+  @Get('mine')
   async getMyBookings(@Req() req) {
     return this.bookingService.getMyBookings(req.user.userId);
   }
