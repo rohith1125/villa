@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
-const Razorpay = require('razorpay'); // ✅ Fixed import for CommonJS module
 import { PrismaService } from '../prisma/prisma.service';
+
+// Import Razorpay using require since there are no types available
+const Razorpay = require('razorpay');
 
 @Injectable()
 export class PaymentService {

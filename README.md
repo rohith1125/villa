@@ -1,111 +1,232 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Villa Rental Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A comprehensive backend API for managing villa rentals with features like user authentication, booking management, payment processing, and notifications.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **User Authentication**: JWT-based authentication with role-based access (Guest/Owner/Admin)
+- **Villa Management**: Create, update, publish villas with images and amenities
+- **Booking System**: Advanced booking management with availability checking
+- **Payment Integration**: Support for Stripe and Razorpay payment gateways
+- **Notification System**: Email and WhatsApp notifications for booking updates
+- **PDF Generation**: Automatic invoice generation for confirmed bookings
+- **Automated Tasks**: Scheduled cleanup of unpaid bookings
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- **Framework**: NestJS
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: JWT tokens
+- **Payments**: Stripe & Razorpay
+- **Notifications**: Nodemailer (email) & Twilio (WhatsApp)
+- **PDF Generation**: PDFKit
+- **Testing**: Jest
 
-```bash
-$ npm install
+## Project Structure
+
+```
+src/
+├── auth/           # Authentication module
+├── booking/        # Booking management
+├── notification/   # Email & WhatsApp notifications
+├── payment/        # Payment processing
+├── prisma/         # Database service
+├── user/           # User management
+├── villa/          # Villa management
+└── main.ts         # Application entry point
 ```
 
-## Compile and run the project
+## Setup Instructions
 
-```bash
-# development
-$ npm run start
+### Prerequisites
 
-# watch mode
-$ npm run start:dev
+- Node.js (v16 or higher)
+- PostgreSQL database
+- npm or yarn
 
-# production mode
-$ npm run start:prod
-```
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd villa
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Fill in the required environment variables in `.env`:
+
+   ```env
+   # Database
+   DATABASE_URL="postgresql://username:password@localhost:5432/villa_rental"
+
+   # JWT Configuration
+   JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
+
+   # Email Configuration (Optional)
+   EMAIL_HOST="smtp.gmail.com"
+   EMAIL_PORT="587"
+   EMAIL_USER="your-email@gmail.com"
+   EMAIL_PASS="your-app-password"
+   EMAIL_FROM="your-email@gmail.com"
+
+   # Twilio Configuration (Optional)
+   TWILIO_ACCOUNT_SID="your-twilio-account-sid"
+   TWILIO_AUTH_TOKEN="your-twilio-auth-token"
+   TWILIO_WHATSAPP_FROM="whatsapp:+14155238886"
+
+   # Stripe Configuration (Optional)
+   STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
+   STRIPE_WEBHOOK_SECRET="whsec_your_webhook_secret"
+
+   # Razorpay Configuration (Optional)
+   RAZORPAY_KEY_ID="rzp_test_your_key_id"
+   RAZORPAY_KEY_SECRET="your_razorpay_key_secret"
+
+   # Application Configuration
+   PORT="3000"
+   DOMAIN="http://localhost:3000"
+   ```
+
+4. **Set up the database**
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+5. **Run the application**
+   ```bash
+   # Development mode
+   npm run start:dev
+
+   # Production mode
+   npm run build
+   npm run start:prod
+   ```
 
 ## Frontend
 
-This repository now includes a small React application located in the
-`frontend` directory. It can be used to browse published villas from the
-API.
+This repository includes a React frontend application located in the `frontend` directory for browsing published villas.
 
 ```bash
-$ cd frontend
-$ npm install
-$ npm start
+cd frontend
+npm install
+npm start
 ```
 
-## Run tests
+## Testing
 
 ```bash
-# unit tests
-$ npm run test
+# Run all tests
+npm run test
 
-# e2e tests
-$ npm run test:e2e
+# Run tests in watch mode
+npm run test:watch
 
-# test coverage
-$ npm run test:cov
+# Run tests with coverage
+npm run test:cov
+
+# Run e2e tests
+npm run test:e2e
 ```
+
+## Code Quality
+
+```bash
+# Run linter
+npm run lint
+
+# Format code
+npm run format
+
+# Run build
+npm run build
+```
+
+## API Endpoints
+
+### Authentication
+- `POST /auth/register` - Register new user
+- `POST /auth/login` - User login
+
+### User Management
+- `GET /user/me` - Get current user profile
+
+### Villa Management
+- `GET /villa` - List all published villas
+- `GET /villa/:id` - Get villa details
+- `POST /villa` - Create villa (Owner only)
+- `GET /villa/mine` - Get own villas (Owner only)
+- `PATCH /villa/:id` - Update villa (Owner only)
+- `DELETE /villa/:id` - Delete villa (Owner only)
+- `GET /villa/:id/availability` - Get villa availability
+- `POST /villa/:id/availability` - Block dates (Owner only)
+
+### Booking Management
+- `POST /booking` - Create booking
+- `GET /booking/mine` - Get user's bookings
+- `POST /booking/:id/confirm` - Confirm booking (Owner only)
+- `POST /booking/:id/reject` - Reject booking (Owner only)
+- `GET /booking/villa/:id` - Get bookings for villa (Owner only)
+
+### Payment Processing
+- `POST /payment/initiate` - Initiate payment
+- `POST /payment/webhook/stripe` - Stripe webhook
+- `POST /payment/webhook/razorpay` - Razorpay webhook
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `DATABASE_URL` | ✅ | PostgreSQL connection string |
+| `JWT_SECRET` | ✅ | Secret key for JWT tokens |
+| `EMAIL_HOST` | ❌ | SMTP host for email notifications |
+| `EMAIL_PORT` | ❌ | SMTP port (default: 587) |
+| `EMAIL_USER` | ❌ | SMTP username |
+| `EMAIL_PASS` | ❌ | SMTP password |
+| `EMAIL_FROM` | ❌ | From email address |
+| `TWILIO_ACCOUNT_SID` | ❌ | Twilio account SID for WhatsApp |
+| `TWILIO_AUTH_TOKEN` | ❌ | Twilio auth token |
+| `TWILIO_WHATSAPP_FROM` | ❌ | Twilio WhatsApp number |
+| `STRIPE_SECRET_KEY` | ❌ | Stripe secret key |
+| `STRIPE_WEBHOOK_SECRET` | ❌ | Stripe webhook secret |
+| `RAZORPAY_KEY_ID` | ❌ | Razorpay key ID |
+| `RAZORPAY_KEY_SECRET` | ❌ | Razorpay secret |
+| `PORT` | ❌ | Application port (default: 3000) |
+| `DOMAIN` | ❌ | Application domain for redirects |
+
+## Database Schema
+
+The application uses PostgreSQL with Prisma ORM. Key entities:
+
+- **User**: Authentication and profile management
+- **Villa**: Property details and management
+- **Booking**: Reservation management
+- **Payment**: Payment transaction tracking
+- **Notification**: Notification history
+- **VillaAvailability**: Availability management
+- **Review**: User reviews and ratings
+
+## Security Features
+
+- JWT-based authentication
+- Environment variable configuration
+- Input validation and sanitization
+- CORS enabled for frontend integration
+- Error handling without sensitive data exposure
 
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is licensed under the UNLICENSED license.
